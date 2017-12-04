@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Kubrickology</title>
+    <script type="text/javascript" src="./svg-morpheus.min.js"></script>
+
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700,900');
+
+    body, html {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+        font-weight: 900;
+        text-align: center;
+    }
+
+    h2, h3 {
+        font-size: 1.25rem;
+        font-weight: 400;
+    }
+
+    main {
+      font-weight: 300;
+    }
+
+    main > p {
+      font-size: 12px;
+    }
+
+    #cover {
+        position: fixed;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+        background: var(--colorMain); /* For browsers that do not support gradients */
+        background: -webkit-linear-gradient(var(--colorMain), var(--colorSecond)); /* For Safari 5.1 to 6.0 */
+        background: -o-linear-gradient(var(--colorMain), var(--colorSecond)); /* For Opera 11.1 to 12.0 */
+        background: -moz-linear-gradient(var(--colorMain), var(--colorSecond)); /* For Firefox 3.6 to 15 */
+        background: linear-gradient(var(--colorMain), var(--colorSecond)); /* Standard syntax */
+        z-index: 1;
+    }
+
+    #logoContainer {
+        position: relative;
+        width: 680px;
+        left: 50%;
+        margin-left: -340px;
+        overflow: hidden;
+        margin-top: -200px;
+        height: 560px;
+        z-index: 2;
+    }
+
+    main {
+      position: relative;
+      width: 440px;
+      left: 50%;
+      margin-left: -220px;
+      z-index: 3;
+    }
+
+    </style>
+
+    <script>
+    'use strict';
+
+    var randomColor = function(){
+      return "hsl(" + 360 * Math.random() + ',' +
+                 (25 + 70 * Math.random()) + '%,' + 
+                 (85 + 10 * Math.random()) + '%)';
+    }
+
+    var newStyles = document.createElement('style')
+    document.head.append(newStyles)
+    newStyles.innerHTML = "a:link     {color: black; text-decoration: underline; }" +
+    "a:active   {color: " + randomColor() + "; text-decoration: underline; }" +
+    "a:visited  {color: black; text-decoration: underline; }" +
+    "a:hover    {color: " + randomColor() + "; text-decoration: none; }" +
+    "html {" +
+        "--colorMain:   " + randomColor() + ";" +
+        "--colorSecond: " + randomColor() + ";" +
+    "}";
+    
+    window.onload = function () {
+
+        var easings = ['in-out', 'in', 'out'];
+    
+        var randomIntFromInterval = function(min, max, not){
+            var returner = Math.floor(Math.random()*(max-min+1)+min);
+            if(typeof not !== 'undefined' && returner == not){
+                returner = randomIntFromInterval(min, max, not);
+            }
+            return returner;
+        }
+
+        var randomHexFromInterval = function(min, max, not){
+            return Number(randomIntFromInterval(min, max)).toString(16);
+        }
+    
+        var runMorph = function(svgMorpheus){ 
+            var kubNo = randomIntFromInterval(1, 4, 1);
+            svgMorpheus.to('kub' + kubNo, {
+                duration: randomIntFromInterval(960, 3800),
+                easing: 'elastic-' + easings[Math.floor(Math.random() * easings.length)],
+                rotation: 'random',
+            }, function(){
+                setTimeout(function(){
+                  kubNo = randomIntFromInterval(1, 4, kubNo);
+                  runMorph(svgMorpheus)
+                }, randomIntFromInterval(800, 5600));
+            });
+        }
+    
+        runMorph(new SVGMorpheus('#kubLogo'));
+
+    }
+    </script>
+
+</head>
+<body>
+    <div id="logoContainer">
+        <object data="./logoAni.svg" type="image/svg+xml" id="kubLogo"></object>
+    </div>
+
+    <main>
+        <h1>Kubrickology<br>Speculative Tech &amp; Design</h1>
+        <h3>🚀 <a href="mailto:hello@kub.design">hello@kub.design</a><br>🦆 <a href="https://bob.wtf" target="_blank">Bob's WTF blog</a></h3>
+
+        <p id="ems"></p>
+    </main>
+
+    <div id="cover"></div>
+</body>
+</html>
